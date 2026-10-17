@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Materi dan Quiz TKJ Kelas X</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f1f5f9;
+    color: #1e293b;
+}
+
+header {
+    background: linear-gradient(135deg, #0f766e, #164e63);
+    color: white;
+    padding: 25px 15px;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0 0 10px;
+    font-size: 25px;
+}
+
+header p {
+    margin: 0;
+    font-size: 14px;
+}
+
+.container {
+    max-width: 850px;
+    margin: 20px auto;
+    padding: 0 14px;
+}
+
+.card {
+    background: white;
+    padding: 18px;
+    margin-bottom: 15px;
+    border-radius: 12px;
+    box-shadow: 0 3px 10px #0000000d;
+}
+
+h2 {
+    color: #0f766e;
+    font-size: 20px;
+}
+
+h3 {
+    font-size: 17px;
+}
+
+button {
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.menu-btn {
+    width: 100%;
+    margin: 5px 0;
+    text-align: left;
+    background: #e0f2fe;
+    color: #075985;
+}
+
+.menu-btn:hover {
+    background: #bae6fd;
+}
+
+.primary-btn {
+    background: #0f766e;
+    color: white;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.secondary-btn {
+    background: #e2e8f0;
+    color: #1e293b;
+    margin-top: 10px;
+    width: 100%;
+}
+
+.option {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    margin: 8px 0;
+    font-weight: normal;
+    line-height: 1.5;
+}
+
+.option:focus,
+.option:hover {
+    background: #ccfbf1;
+}
+
+.option.selected {
+    background: #ccfbf1;
+    border: 2px solid #0f766e;
+}
+
+.hidden {
+    display: none;
+}
+
+.score {
+    font-size: 36px;
+    color: #0f766e;
+    font-weight: bold;
+    text-align: center;
+}
+
+.question {
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.feedback {
+    padding: 12px;
+    margin-top: 10px;
+    border-radius: 8px;
+    line-height: 1.6;
+}
+
+.correct {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.wrong {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+footer {
+    text-align: center;
+    color: #64748b;
+    padding: 20px;
+    font-size: 13px;
+}
+
+li {
+    margin-bottom: 8px;
+    line-height: 1.6;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>📚 MATERI TKJ KELAS X</h1>
+    <p>Teknik Jaringan Komputer dan Telekomunikasi</p>
+    <p>Belajar Materi • Latihan Quiz • Evaluasi Nilai</p>
+</header>
+
+<div class="container">
+
+    <section class="card" id="home">
+        <h2>Selamat Datang!</h2>
+        <p>
+            Pelajari materi singkat TKJ, lalu kerjakan quiz
+            untuk menguji pemahamanmu.
+        </p>
+
+        <h3>Daftar Materi</h3>
+        <div id="menuMateri"></div>
+    </section>
+
+    <section class="card hidden" id="materiSection">
+        <h2 id="judulMateri"></h2>
+        <div id="isiMateri"></div>
+
+        <button class="primary-btn" onclick="mulaiQuiz()">
+            📝 Mulai Quiz Materi Ini
+        </button>
+
+        <button class="secondary-btn" onclick="kembaliHome()">
+            ← Kembali ke Daftar Materi
+        </button>
+    </section>
+
+    <section class="card hidden" id="quizSection">
+        <h2 id="judulQuiz"></h2>
+        <p id="petunjukQuiz">
+            Pilih satu jawaban yang paling tepat pada setiap soal.
+        </p>
+
+        <form id="quizForm">
+            <div id="daftarSoal"></div>
+            <button class="primary-btn" type="submit">
+                Periksa Jawaban dan Lihat Nilai
+            </button>
+        </form>
+
+        <button class="secondary-btn" onclick="kembaliMateri()">
+            ← Kembali ke Materi
+        </button>
+    </section>
+
+    <section class="card hidden" id="hasilSection">
+        <h2>📊 Hasil Quiz</h2>
+
+        <p class="score" id="nilaiAkhir">0</p>
+        <p id="keteranganNilai" style="text-align:center"></p>
+        <p id="ringkasanNilai" style="text-align:center"></p>
+
+        <h3>Pembahasan dan Kunci Jawaban</h3>
+        <div id="pembahasan"></div>
+
+        <button class="primary-btn" onclick="ulangQuiz()">
+            🔄 Ulangi Quiz
+        </button>
+
+        <button class="secondary-btn" onclick="kembaliHome()">
+            Kembali ke Daftar Materi
+        </button>
+    </section>
+
+</div>
+
+<footer>
+    Media Pembelajaran TKJ Kelas X
+</footer>
+
+<script>
+const materiTKJ = [
+
+{
+    judul: "1. Proses Bisnis Teknik Jaringan dan Komunikasi",
+    materi: `
+    <h3>A. Pengertian</h3>
+    <p>Proses bisnis adalah rangkaian kegiatan yang dilakukan
+    untuk menghasilkan barang atau jasa guna memenuhi kebutuhan
+    pelanggan dan memperoleh keuntungan.</p>
+
+    <h3>B. Alur Proses Bisnis</h3>
+    <p>Input → Proses → Output.</p>
+    <ul>
+        <li>Input: modal, alat, bahan, dan tenaga kerja.</li>
+        <li>Proses: kegiatan menghasilkan barang atau jasa.</li>
+        <li>Output: hasil berupa barang atau jasa.</li>
+    </ul>
+
+    <h3>C. Contoh Usaha TKJ</h3>
+    <ul>
+        <li>ISP: penyedia layanan internet.</li>
+        <li>Jasa instalasi jaringan komputer.</li>
+        <li>Penjualan perangkat jaringan.</li>
+        <li>Perawatan dan perbaikan jaringan.</li>
+    </ul>
+
+    <h3>D. Dokumen Bisnis</h3>
+    <p>Surat penawaran, surat pesanan, faktur, dan kuitansi
+    digunakan untuk mendukung administrasi transaksi bisnis.</p>
+    `,
+    soal: [
+        {
+            t: "Apa yang dimaksud dengan proses bisnis?",
+            p: [
+                "Rangkaian kegiatan untuk menghasilkan barang atau jasa",
+                "Kegiatan bermain komputer",
+                "Kegiatan memperbaiki gedung",
+                "Kegiatan tanpa tujuan"
+            ],
+            j: 0,
+            e: "Proses bisnis merupakan rangkaian kegiatan yang menghasilkan barang atau jasa."
+        },
+        {
+            t: "Urutan dasar proses bisnis adalah...",
+            p: [
+                "Output → Input → Proses",
+                "Input → Proses → Output",
+                "Proses → Output → Input",
+                "Output → Proses → Input"
+            ],
+            j: 1,
+            e: "Proses bisnis dimulai dari input, dilanjutkan proses, kemudian menghasilkan output."
+        },
+        {
+            t: "Usaha yang menyediakan layanan akses internet disebut...",
+            p: ["LAN", "ISP", "CPU", "RAM"],
+            j: 1,
+            e: "ISP adalah Internet Service Provider, yaitu penyedia layanan internet."
+        },
+        {
+            t: "Dokumen yang menjadi bukti penerimaan pembayaran adalah...",
+            p: ["Kuitansi", "Surat lamaran", "Jadwal kerja", "Surat izin"],
+            j: 0,
+            e: "Kuitansi merupakan bukti tertulis penerimaan pembayaran."
+        },
+        {
+            t: "Berikut yang termasuk usaha di bidang TKJ adalah...",
+            p: [
+                "Jasa instalasi jaringan",
+                "Jasa menjahit",
+                "Jasa tata boga",
+                "Jasa pertanian"
+            ],
+            j: 0,
+            e: "Jasa instalasi jaringan merupakan salah satu peluang usaha TKJ."
+        }
+    ]
+},
+
+{
+    judul: "2. Komponen Komputer",
+    materi: `
+    <h3>A. Sistem Komputer</h3>
+    <p>Sistem komputer terdiri atas tiga komponen utama:
+    hardware, software, dan brainware.</p>
+
+    <ul>
+        <li><b>Hardware:</b> perangkat keras yang dapat disentuh.</li>
+        <li><b>Software:</b> program yang menjalankan perintah.</li>
+        <li><b>Brainware:</b> manusia yang menggunakan komputer.</li>
+    </ul>
+
+    <h3>B. Perangkat Utama</h3>
+    <ul>
+        <li>CPU: memproses instruksi dan data.</li>
+        <li>RAM: menyimpan data sementara saat komputer bekerja.</li>
+        <li>HDD/SSD: menyimpan data dalam jangka panjang.</li>
+        <li>Motherboard: menghubungkan komponen komputer.</li>
+        <li>Power Supply: menyediakan daya listrik untuk komponen.</li>
+    </ul>
+
+    <h3>C. Perangkat Input dan Output</h3>
+    <p>Input memasukkan data, contohnya keyboard dan mouse.
+    Output menyajikan hasil, contohnya monitor dan printer.</p>
+    `,
+    soal: [
+        {
+            t: "Bagian fisik komputer disebut...",
+            p: ["Software", "Brainware", "Hardware", "Internet"],
+            j: 2,
+            e: "Hardware adalah perangkat fisik komputer."
+        },
+        {
+            t: "Komponen yang memproses instruksi komputer adalah...",
+            p: ["CPU", "Monitor", "Keyboard", "Printer"],
+            j: 0,
+            e: "CPU menjalankan instruksi dan mengolah data."
+        },
+        {
+            t: "Memori yang menyimpan data sementara adalah...",
+            p: ["SSD", "RAM", "Flashdisk", "DVD"],
+            j: 1,
+            e: "RAM menyimpan data sementara selama komputer bekerja."
+        },
+        {
+            t: "Perangkat yang digunakan untuk memasukkan data adalah...",
+            p: ["Monitor", "Speaker", "Printer", "Keyboard"],
+            j: 3,
+            e: "Keyboard merupakan perangkat input."
+        },
+        {
+            t: "Fungsi utama motherboard adalah...",
+            p: [
+                "Mencetak dokumen",
+                "Menghubungkan komponen komputer",
+                "Menampilkan suara",
+                "Menghubungkan komputer ke listrik secara langsung"
+            ],
+            j: 1,
+            e: "Motherboard menjadi papan utama penghubung komponen komputer."
+        }
+    ]
+},
+
+{
+    judul: "3. Perkembangan Teknologi Jaringan dan Telekomunikasi",
+    materi: `
+    <h3>A. Pengertian</h3>
+    <p>Jaringan komputer menghubungkan perangkat agar dapat
+    bertukar data dan berbagi sumber daya. Telekomunikasi
+    memungkinkan informasi dikirimkan dari jarak jauh.</p>
+
+    <h3>B. Jenis Jaringan</h3>
+    <ul>
+        <li>PAN: jaringan perangkat pribadi jarak dekat.</li>
+        <li>LAN: jaringan dalam area terbatas, misalnya sekolah.</li>
+        <li>MAN: jaringan yang mencakup wilayah kota.</li>
+        <li>WAN: jaringan dengan cakupan wilayah luas.</li>
+    </ul>
+
+    <h3>C. Media Transmisi</h3>
+    <ul>
+        <li>UTP: kabel jaringan yang umum digunakan pada LAN.</li>
+        <li>Fiber optik: mengirimkan data menggunakan cahaya.</li>
+        <li>Nirkabel: menggunakan gelombang radio, misalnya Wi-Fi.</li>
+    </ul>
+
+    <h3>D. Perkembangan Teknologi</h3>
+    <p>Teknologi seluler berkembang dari 1G, 2G, 3G, 4G hingga
+    5G. Perkembangan ini meningkatkan kemampuan komunikasi
+    dan akses data. TCP/IP menjadi kumpulan protokol penting
+    untuk komunikasi melalui internet.</p>
+
+    <h3>E. Perangkat Jaringan</h3>
+    <p>Switch menghubungkan perangkat dalam jaringan lokal,
+    sedangkan router menghubungkan jaringan yang berbeda.</p>
+    `,
+    soal: [
+        {
+            t: "Jaringan dalam area terbatas seperti laboratorium sekolah disebut...",
+            p: ["WAN", "MAN", "LAN", "Internet"],
+            j: 2,
+            e: "LAN digunakan untuk area terbatas seperti rumah, laboratorium, atau gedung."
+        },
+        {
+            t: "Jaringan yang mencakup wilayah luas disebut...",
+            p: ["PAN", "WAN", "LAN", "Bluetooth"],
+            j: 1,
+            e: "WAN mencakup wilayah geografis yang luas."
+        },
+        {
+            t: "Media transmisi yang menggunakan cahaya adalah...",
+            p: ["UTP", "Koaksial", "Fiber optik", "Bluetooth"],
+            j: 2,
+            e: "Fiber optik mengirimkan informasi melalui sinyal cahaya."
+        },
+        {
+            t: "Perangkat yang menghubungkan jaringan berbeda adalah...",
+            p: ["Keyboard", "Router", "Monitor", "Printer"],
+            j: 1,
+            e: "Router meneruskan paket data ant jaringan berdasarkan informasi rute."
+        },
+        {
+            t: "Urutan generasi teknologi seluler yang benar adalah...",
+            p: [
+                "1G → 2G → 3G → 4G → 5G",
+                "5G → 3G → 1G → 4G → 2G",
+                "2G → 4G → 1G → 3G → 5G",
+                "3G → 1G → 5G → 2G → 4G"
+            ],
+            j: 0,
+            e: "Urutan generasi teknologi seluler adalah 1G hingga 5G."
+        }
+    ]
+},
+
+{
+    judul: "4. BIOS dan Proses Booting",
+    materi: `
+    <h3>A. Pengertian BIOS</h3>
+    <p>BIOS adalah singkatan dari Basic Input/Output System.
+    BIOS merupakan firmware yang membantu menginisialisasi
+    perangkat keras saat komputer dinyalakan.</p>
+
+    <h3>B. Fungsi BIOS</h3>
+    <ul>
+        <li>Melakukan pemeriksaan awal perangkat keras.</li>
+        <li>Menyediakan pengaturan dasar perangkat keras.</li>
+        <li>Mengatur urutan perangkat booting.</li>
+        <li>Membantu memulai proses pemuatan sistem operasi.</li>
+    </ul>
+
+    <h3>C. POST dan Booting</h3>
+    <p>POST (Power-On Self-Test) merupakan pemeriksaan awal
+    perangkat keras. Setelah inisialisasi, firmware membantu
+    memulai proses booting untuk menjalankan sistem operasi.</p>
+
+    <h3>D. Cara Masuk BIOS/UEFI</h3>
+    <p>Tombol yang digunakan bergantung pada perangkat,
+    misalnya Del, F2, atau Esc. Pada komputer modern,
+    firmware UEFI banyak digunakan sebagai pengganti BIOS
+    tradisional.</p>
+    `,
+    soal: [
+        {
+            t: "Kepanjangan BIOS adalah...",
+            p: [
+                "Basic Input/Output System",
+                "Binary Internet Operating Software",
+                "Basic Internal Online System",
+                "Browser Input Output Service"
+            ],
+            j: 0,
+            e: "BIOS adalah Basic Input/Output System."
+        },
+        {
+            t: "Pemeriksaan awal perangkat keras disebut...",
+            p: ["POST", "HTML", "HTTP", "VLAN"],
+            j: 0,
+            e: "POST adalah Power-On Self-Test."
+        },
+        {
+            t: "Pengaturan untuk memilih perangkat awal komputer disebut...",
+            p: ["Boot Priority", "Desktop Theme", "Screen Saver", "Recycle Bin"],
+            j: 0,
+            e: "Boot Priority menentukan urutan perangkat yang dicoba untuk booting."
+        },
+        {
+            t: "Firmware membantu komputer untuk...",
+            p: [
+                "Mencetak semua dokumen",
+                "Menginisialisasi perangkat keras saat dinyalakan",
+                "Menggantikan semua aplikasi",
+                "Membuat akun media sosial"
+            ],
+            j: 1,
+            e: "Firmware menjalankan fungsi dasar untuk menginisialisasi perangkat keras."
+        },
+        {
+            t: "Tombol untuk masuk ke BIOS/UEFI dapat berupa...",
+            p: ["F2 atau Del", "Ctrl+C saja", "Alt+Tab", "Windows+M"],
+            j: 0,
+            e: "Tombol akses berbeda menurut merek dan model perangkat."
+        }
+    ]
+},
+
+{
+    judul: "5. Profesi dan Kewirausahaan Bidang TKJ",
+    materi: `
+    <h3>A. Profesi Bidang TKJ</h3>
+    <ul>
+        <li>Network administrator: mengelola jaringan komputer.</li>
+        <li>Network technician: memasang dan memperbaiki jaringan.</li>
+        <li>IT support: membantu mengatasi masalah teknologi.</li>
+        <li>System administrator: mengelola sistem komputer dan server.</li>
+        <li>Technopreneur: membangun usaha berbasis teknologi.</li>
+    </ul>
+
+    <h3>B. Kewirausahaan</h3>
+    <p>Kewirausahaan adalah kegiatan membangun dan mengembangkan
+    usaha dengan memanfaatkan peluang serta mengelola risiko.</p>
+
+    <h3>C. Peluang Usaha TKJ</h3>
+    <ul>
+        <li>Jasa instalasi jaringan.</li>
+        <li>Perawatan komputer dan jaringan.</li>
+        <li>Penjualan perangkat jaringan.</li>
+        <li>Pemasangan Wi-Fi sesuai ketentuan yang berlaku.</li>
+    </ul>
+
+    <h3>D. Sikap Wirausaha</h3>
+    <p>Kreatif, disiplin, jujur, bertanggung jawab, komunikatif,
+    dan mampu memecahkan masalah.</p>
+    `,
+    soal: [
+        {
+            t: "Profesi yang bertugas mengelola jaringan komputer adalah...",
+            p: ["Network administrator", "Koki", "Desainer busana", "Kasir"],
+            j: 0,
+            e: "Network administrator mengelola dan memantau jaringan komputer."
+        },
+        {
+            t: "Orang yang membangun usaha berbasis teknologi disebut...",
+            p: ["Technopreneur", "Operator kasir", "Petani", "Kurir"],
+            j: 0,
+            e: "Technopreneur adalah wirausaha yang memanfaatkan teknologi."
+        },
+        {
+            t: "Berikut yang merupakan peluang usaha TKJ adalah...",
+            p: [
+                "Jasa instalasi jaringan",
+                "Jasa salon hewan saja",
+                "Penjualan sayuran saja",
+                "Jasa dekorasi kue saja"
+            ],
+            j: 0,
+            e: "Instalasi jaringan merupakan salah satu usaha yang sesuai dengan keahlian TKJ."
+        },
+        {
+            t: "Sikap yang penting dalam berwirausaha adalah...",
+            p: ["Tidak jujur", "Tidak disiplin", "Bertanggung jawab", "Mengabaikan pelanggan"],
+            j: 2,
+            e: "Tanggung jawab dan kejujuran membantu membangun kepercayaan pelanggan."
+        },
+        {
+            t: "Sebelum membuka usaha jasa jaringan, sebaiknya kita...",
+            p: [
+                "Mengabaikan kebutuhan pelanggan",
+                "Menganalisis peluang dan kebutuhan pasar",
+                "Langsung menghabiskan modal",
+                "Tidak menghitung biaya"
+            ],
+            j: 1,
+            e: "Analisis pasar membantu mengetahui kebutuhan pelanggan dan peluang usaha."
+        }
+    ]
+},
+
+{
+    judul: "6. K3LH dan Budaya Kerja",
+    materi: `
+    <h3>A. Pengertian K3LH</h3>
+    <p>K3LH adalah Keselamatan dan Kesehatan Kerja serta
+    Lingkungan Hidup. K3LH bertujuan melindungi pekerja,
+    mencegah kecelakaan, dan menjaga lingkungan.</p>
+
+    <h3>B. Penerapan K3LH di Laboratorium TKJ</h3>
+    <ul>
+        <li>Periksa kabel dan peralatan sebelum digunakan.</li>
+        <li>Jaga tangan dan area kerja tetap kering saat menangani listrik.</li>
+        <li>Matikan dan cabut sumber listrik sebelum perbaikan,
+        jika aman dilakukan.</li>
+        <li>Hindari kabel berserakan di lantai.</li>
+        <li>Gunakan alat pelindung yang sesuai dengan pekerjaan.</li>
+        <li>Pisahkan limbah elektronik dari sampah biasa.</li>
+    </ul>
+
+    <h3>C. Budaya Kerja</h3>
+    <p>Budaya kerja yang baik mencakup disiplin, tanggung jawab,
+    kerja sama, komunikasi, kebersihan, dan ketelitian.</p>
+
+    <h3>D. Prinsip 5R</h3>
+    <ul>
+        <li>Ringkas: memilah barang yang diperlukan.</li>
+        <li>Rapi: menata barang pada tempatnya.</li>
+        <li>Resik: menjaga kebersihan.</li>
+        <li>Rawat: mempertahankan kondisi yang baik.</li>
+        <li>Rajin: membiasakan perilaku disiplin.</li>
+    </ul>
+    `,
+    soal: [
+        {
+            t: "K3LH merupakan singkatan dari...",
+            p: [
+                "Keselamatan dan Kesehatan Kerja serta Lingkungan Hidup",
+                "Komputer dan Keamanan Layanan Harian",
+                "Keamanan Komputer dan Listrik Harian",
+                "Kegiatan Kerja dan Latihan Harian"
+            ],
+            j: 0,
+            e: "K3LH berarti Keselamatan dan Kesehatan Kerja serta Lingkungan Hidup."
+        },
+        {
+            t: "Sebelum memperbaiki perangkat komputer, tindakan yang tepat adalah...",
+            p: [
+                "Menyiram perangkat dengan air",
+                "Mematikan dan mencabut sumber listrik jika aman",
+                "Membongkar saat perangkat menyala",
+                "Menyentuh kabel yang terkelupas"
+            ],
+            j: 1,
+            e: "Putuskan sumber listrik sebelum perbaikan, dengan tetap memperhatikan prosedur keselamatan."
+        },
+        {
+            t: "Kabel yang berserakan di lantai berisiko menyebabkan...",
+            p: [
+                "Kecelakaan tersandung",
+                "Internet menjadi lebih cepat",
+                "Komputer lebih awet",
+                "Listrik menjadi hemat"
+            ],
+            j: 0,
+            e: "Kabel yang tidak tertata dapat menyebabkan orang tersandung dan jatuh."
+        },
+        {
+            t: "Contoh budaya kerja yang baik adalah...",
+            p: [
+                "Mengabaikan tugas",
+                "Datang sesuka hati",
+                "Disiplin dan bertanggung jawab",
+                "Membiarkan alat berserakan",
+                
+            ],
+            j: 2,
+            e: "Disiplin dan tanggung jawab mendukung pekerjaan yang aman dan efektif."
+        },
+        {
+            t: "Dalam prinsip 5R, kegiatan menjaga kebersihan disebut...",
+            p: ["Ringkas", "Rapi", "Resik", "Rajin"],
+            j: 2,
+            e: "Resik berarti menjaga kebersihan lingkungan dan tempat kerja."
+        }
+    ]
+}
+];
+
+let babAktif = 0;
+let hasilTerakhir = null;
+
+// Menampilkan daftar materi
+function tampilkanMenu() {
+    const menu = document.getElementById("menuMateri");
+    menu.innerHTML = "";
+
+    materiTKJ.forEach((bab, index) => {
+        const tombol = document.createElement("button");
+        tombol.className = "menu-btn";
+        tombol.textContent = "📖 " + bab.judul;
+
+        tombol.onclick = () => bukaMateri(index);
+        menu.appendChild(tombol);
+    });
+}
+
+// Membuka materi
+function bukaMateri(index) {
+    babAktif = index;
+
+    document.getElementById("home").classList.add("hidden");
+    document.getElementById("quizSection").classList.add("hidden");
+    document.getElementById("hasilSection").classList.add("hidden");
+
+    document.getElementById("materiSection").classList.remove("hidden");
+
+    document.getElementById("judulMateri").textContent =
+        materiTKJ[index].judul;
+
+    document.getElementById("isiMateri").innerHTML =
+        materiTKJ[index].materi;
+
+    window.scrollTo(0, 0);
+}
+
+// Memulai quiz
+function mulaiQuiz() {
+    const bab = materiTKJ[babAktif];
+
+    document.getElementById("materiSection").classList.add("hidden");
+    document.getElementById("hasilSection").classList.add("hidden");
+    document.getElementById("quizSection").classList.remove("hidden");
+
+    document.getElementById("judulQuiz").textContent =
+        "Quiz: " + bab.judul;
+
+    const daftarSoal = document.getElementById("daftarSoal");
+    daftarSoal.innerHTML = "";
+
+    bab.soal.forEach((soal, index) => {
+        const kotak = document.createElement("div");
+        kotak.className = "question";
+
+        const judul = document.createElement("h3");
+        judul.textContent =
+            (index + 1) + ". " + soal.t;
+
+        kotak.appendChild(judul);
+
+        soal.p.forEach((pilihan, pilihanIndex) => {
+            const label = document.createElement("label");
+            const radio = document.createElement("input");
+
+            radio.type = "radio";
+            radio.name = "soal" + index;
+            radio.value = pilihanIndex;
+            radio.style.marginRight = "8px";
+
+            label.className = "option";
+            label.appendChild(radio);
+            label.appendChild(
+                document.createTextNode(
+                    String.fromCharCode(65 + pilihanIndex) +
+                    ". " + pilihan
+                )
+            );
+
+            kotak.appendChild(label);
+        });
+
+        daftarSoal.appendChild(kotak);
+    });
+
+    window.scrollTo(0, 0);
+}
+
+// Memeriksa jawaban dan menghitung nilai
+document.getElementById("quizForm").addEventListener(
+    "submit",
+    function(event) {
+        event.preventDefault();
+
+        const bab = materiTKJ[babAktif];
+        let benar = 0;
+        let kosong = 0;
+        const jawabanSiswa = [];
+
+        bab.soal.forEach((soal, index) => {
+            const pilihan = document.querySelector(
+                'input[name="soal' + index + '"]:checked'
+            );
+
+            if (!pilihan) {
+                kosong++;
+                jawabanSiswa.push(-1);
+            } else {
+                const nilaiJawaban = Number(pilihan.value);
+                jawabanSiswa.push(nilaiJawaban);
+
+                if (nilaiJawaban === soal.j) {
+                    benar++;
+                }
+            }
+        });
+
+        const total = bab.soal.length;
+        const nilai = Math.round((benar / total) * 100);
+
+        hasilTerakhir = {
+            benar: benar,
+            total: total,
+            nilai: nilai,
+            kosong: kosong,
+            jawaban: jawabanSiswa
+        };
+
+        tampilkanHasil();
+    }
+);
+
+// Menampilkan hasil quiz dan kunci jawaban
+function tampilkanHasil() {
+    const bab = materiTKJ[babAktif];
+    const hasil = hasilTerakhir;
+
+    document.getElementById("quizSection").classList.add("hidden");
+    document.getElementById("hasilSection").classList.remove("hidden");
+
+    document.getElementById("nilaiAkhir").textContent =
+        hasil.nilai;
+
+    let keterangan = "";
+
+    if (hasil.nilai >= 90) {
+        keterangan = "Sangat Baik! 🌟";
+    } else if (hasil.nilai >= 80) {
+        keterangan = "Baik! Terus pertahankan.";
+    } else if (hasil.nilai >= 70) {
+        keterangan = "Cukup baik, tingkatkan lagi.";
+    } else {
+        keterangan = "Ayo pelajari kembali materinya!";
+    }
+
+    document.getElementById("keteranganNilai").textContent =
+        keterangan;
+
+    document.getElementById("ringkasanNilai").textContent =
+        "Jawaban benar: " + hasil.benar + " dari " + hasil.total +
+        " soal. Tidak dijawab: " + hasil.kosong +
+        ". Nilai: " + hasil.nilai + "/100.";
+
+    const pembahasan = document.getElementById("pembahasan");
+    pembahasan.innerHTML = "";
+
+    bab.soal.forEach((soal, index) => {
+        const jawaban = hasil.jawaban[index];
+        const benar = jawaban === soal.j;
+
+        const kotak = document.createElement("div");
+        kotak.className =
+            "feedback " + (benar ? "correct" : "wrong");
+
+        const judul = document.createElement("strong");
+        judul.textContent =
+            (index + 1) + ". " + soal.t;
+
+        kotak.appendChild(judul);
+        kotak.appendChild(document.createElement("br"));
+
+        const status = document.createElement("span");
+
+        if (jawaban === -1) {
+            status.textContent = "Jawabanmu: Tidak dijawab.";
+        } else {
+            status.textContent =
+                "Jawabanmu: " +
+                String.fromCharCode(65 + jawaban) +
+                ". " + soal.p[jawaban];
+        }
+
+        kotak.appendChild(status);
+        kotak.appendChild(document.createElement("br"));
+
+        const kunci = document.createElement("span");
+        kunci.textContent =
+            "Kunci: " +
+            String.fromCharCode(65 + soal.j) +
+            ". " + soal.p[soal.j];
+
+        kotak.appendChild(kunci);
+        kotak.appendChild(document.createElement("br"));
+
+        const penjelasan = document.createElement("span");
+        penjelasan.textContent = "Pembahasan: " + soal.e;
+
+        kotak.appendChild(penjelasan);
+        pembahasan.appendChild(kotak);
+    });
+
+    window.scrollTo(0, 0);
+}
+
+// Mengulang quiz
+function ulangQuiz() {
+    hasilTerakhir = null;
+    mulaiQuiz();
+}
+
+// Kembali ke materi
+function kembaliMateri() {
+    document.getElementById("quizSection").classList.add("hidden");
+    document.getElementById("hasilSection").classList.add("hidden");
+    document.getElementById("materiSection").classList.remove("hidden");
+
+    window.scrollTo(0, 0);
+}
+
+// Kembali ke halaman awal
+function kembaliHome() {
+    document.getElementById("materiSection").classList.add("hidden");
+    document.getElementById("quizSection").classList.add("hidden");
+    document.getElementById("hasilSection").classList.add("hidden");
+    document.getElementById("home").classList.remove("hidden");
+
+    window.scrollTo(0, 0);
+}
+
+// Jalankan aplikasi
+tampilkanMenu();
+</script>
+
+</body>
+</html
+ 
